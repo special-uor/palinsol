@@ -43,13 +43,13 @@ devtools::install_github("special-uor/palinsol")
 ## Example
 
 ### Calculation of orbital parameters
-The function `astro` can be used to find the orbital paraters. This function takes three arguments:
+The function `palinsol::astro` can be used to find the orbital paraters. This function takes three arguments:
 
 - `t`:            time, years after 1950.
 - `solution`:	    solution used. One of `palinsol::ber78` (Berger, 1978), `palinsol::ber90` (Berger and Loutre, 1991) or `palinsol::la04` (Laskar, 2004).
 - `degree`:	      returns angles in degrees if `TRUE`.
 
-For example to find the orbital parameters for the last 100k years with 1k years resolution:
+For example, to find the orbital parameters for the last 100k years with 1k years resolution:
 
 ```{r}
 # Load the pipe operator from `magrittr`
@@ -73,7 +73,7 @@ orb_param %>%
 ```
 
 Create plots for all the variables
-```{r, dpi = 500}
+```{r orbital-parameters, dpi = 500}
 orb_param %>%
   tidyr::pivot_longer(cols = c(eps, ecc, varpi, epsp),
                       names_to = "var") %>%
@@ -86,5 +86,82 @@ orb_param %>%
                                                            "eps" = "Eccentricity (eps)",
                                                            "varpi" = "True Solar Longitude of the Perihelion (varpi)",
                                                            "epsp" = "(epsp)"))) +
+  ggplot2::theme_bw()
+```
+
+### Time series of montly and annual insolation
+The `palinsol::Insol` function, computes incoming solar radiation (insolation) for a given astronomical configuration, true solar longitude and latitude. This function takes five arguments:
+
+- `orbit`: output from a solution, such as `palinsol::ber78` (Berger, 1978), `palinsol::ber90` (Berger and Loutre, 1991) or `palinsol::la04` (Laskar, 2004).
+- `long`:	true solar longitude
+- `lat`: latitude
+- `S0`: total solar irradiance
+- `H`: sun hour angle, in radians
+
+For example, we can find the montly isolation for the last 100 ka years at Lago di Fimon (45.469951, 11.543468) as follows:
+```{r}
+# Generate a sequence (vector) with mid-month values
+mid_month <- seq(from = 15.5, to = 345.5, by = 30)
+
+# Calculate the True Solar Longitudes (TSL) for present-day mid-month values
+tt_present <- 0.0
+orbit_present <- palinsol::astro(t = tt_present, 
+                                 solution = palinsol::ber78, 
+                                 degree = FALSE)
+mid_month_tsl_present <- palinsol::day2l(orbit = orbit_present, 
+                                     day = mid_month)
+
+# Calculate orbital parameters for the last 100 ka years
+## Create sequence (vector) with years
+years <- seq(from = -10^5, to = 0, by = 1000)
+
+## Find orbital parameters
+orb_param <- years %>%
+  purrr::map_df(palinsol::astro, solution = palinsol::ber78, degree = FALSE)
+
+## Append the years to the table with the orbital parameters
+orb_param <- orb_param %>%
+  dplyr::mutate(year = years, .before = 1)
+
+
+# Calculate the isolation values at the location of interest
+## Set the latitude of interest
+lat <- 45.469951
+
+insol_tbl <- mid_month_tsl_present %>%
+  purrr::map(palinsol::Insol, orbit = orb_param, lat = lat * pi / 180, S0 = 1365) %>%
+  magrittr::set_names(c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")) %>%
+  tibble::as_tibble()
+
+## Append the years to the table with the insolation values
+insol_tbl <- insol_tbl %>%
+  dplyr::mutate(year = years, .before = 1)
+
+## Print table with the first 10 rows
+insol_tbl %>%
+  dplyr::slice(1:10) %>%
+  knitr::kable()
+```
+
+Create plots for all the months
+```{r monthly-insolation, dpi = 500}
+insol_tbl %>%
+  tidyr::pivot_longer(cols = 2:13, names_to = "month") %>%
+  dplyr::mutate(month = factor(month,
+                               levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")),
+                season = ifelse(month %in% c("Mar", "Apr", "May"),
+                                "Spring",
+                                ifelse(month %in% c("Jun", "Jul", "Aug"),
+                                       "Summer",
+                                       ifelse(month %in% c("Sep", "Oct", "Nov"),
+                                              "Autumn",
+                                              "Winter"))),
+                season = factor(season,
+                                levels = c("Spring", "Summer", "Autumn", "Winter"))) %>%
+  ggplot2::ggplot(ggplot2::aes(year, value, colour = month)) +
+  ggplot2::geom_point(size = 0.5) +
+  ggplot2::geom_line() +
+  ggplot2::labs(x = "Year", y = "Insolation [W m-2]") + 
+  ggplot2::facet_wrap(facets = ~season, nrow = 2) +
   ggplot2::theme_bw()
 ```
