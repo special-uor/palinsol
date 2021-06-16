@@ -34,3 +34,72 @@ devtools::install_github("special-uor/palinsol")
 ```
 
 ## Example
+
+### Calculation of orbital parameters
+
+The function `astro` can be used to find the orbital paraters. This
+function takes three arguments:
+
+  - `t`: time, years after 1950.
+  - `solution`: solution used. One of `palinsol::ber78` (Berger, 1978),
+    `palinsol::ber90` (Berger and Loutre, 1991) or `palinsol::la04`
+    (Laskar, 2004).
+  - `degree`: returns angles in degrees if `TRUE`.
+
+For example to find the orbital parameters for the last 100k years with
+1k years resolution:
+
+``` r
+# Load the pipe operator from `magrittr`
+`%>%` <- magrittr::`%>%`
+
+# Create sequence (vector) with years
+years <- seq(from = -10^5, to = 0, by = 1000)
+
+# Find orbital parameters
+orb_param <- years %>%
+  purrr::map_df(palinsol::astro, solution = palinsol::ber78, degree = TRUE)
+#> load BER78data
+
+# Append the years to the table with the orbital parameters
+orb_param <- orb_param %>%
+  dplyr::mutate(year = years, .before = 1)
+
+# Print table with the first 10 rows
+orb_param %>%
+  dplyr::slice(1:10) %>%
+  knitr::kable()
+```
+
+|     year |      eps |       ecc |    varpi |      epsp |
+| -------: | -------: | --------: | -------: | --------: |
+| \-100000 | 23.70902 | 0.0387423 | 178.4873 | 0.3912183 |
+|  \-99000 | 23.83934 | 0.0384086 | 194.4552 | 0.3924701 |
+|  \-98000 | 23.95612 | 0.0380598 | 210.3612 | 0.3940328 |
+|  \-97000 | 24.05717 | 0.0376963 | 226.2127 | 0.3958623 |
+|  \-96000 | 24.14078 | 0.0373188 | 242.0180 | 0.3979110 |
+|  \-95000 | 24.20567 | 0.0369279 | 257.7851 | 0.4001294 |
+|  \-94000 | 24.25103 | 0.0365241 | 273.5225 | 0.4024670 |
+|  \-93000 | 24.27642 | 0.0361079 | 289.2382 | 0.4048736 |
+|  \-92000 | 24.28181 | 0.0356796 | 304.9401 | 0.4073000 |
+|  \-91000 | 24.26751 | 0.0352398 | 320.6358 | 0.4096985 |
+
+Create plots for all the variables
+
+``` r
+orb_param %>%
+  tidyr::pivot_longer(cols = c(eps, ecc, varpi, epsp),
+                      names_to = "var") %>%
+  ggplot2::ggplot(ggplot2::aes(year, value)) +
+  ggplot2::geom_point() +
+  ggplot2::geom_line() +
+  ggplot2::facet_wrap(facets = ~var, 
+                      scales = "free",
+                      labeller = ggplot2::labeller(var = c("ecc" = "Obliquity (ecc)",
+                                                           "eps" = "Eccentricity (eps)",
+                                                           "varpi" = "True Solar Longitude of the Perihelion (varpi)",
+                                                           "epsp" = "(epsp)"))) +
+  ggplot2::theme_bw()
+```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
