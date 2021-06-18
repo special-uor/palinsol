@@ -95,8 +95,8 @@ orb_param %>%
   ggplot2::geom_line() +
   ggplot2::facet_wrap(facets = ~var, 
                       scales = "free",
-                      labeller = ggplot2::labeller(var = c("ecc" = "Obliquity (ecc)",
-                                                           "eps" = "Eccentricity (eps)",
+                      labeller = ggplot2::labeller(var = c("ecc" = "Eccentricity (ecc)",
+                                                           "eps" = "Obliquity (eps)",
                                                            "varpi" = "True Solar Longitude of the Perihelion (varpi)",
                                                            "epsp" = "(epsp)"))) +
   ggplot2::theme_bw()
