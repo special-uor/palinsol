@@ -104,7 +104,7 @@ orb_param %>%
 
 <img src="man/figures/README-orbital-parameters-1.png" width="100%" />
 
-### Time series of montly and annual insolation
+### Time series of monthly and annual insolation
 
 The `palinsol::Insol` function, computes incoming solar radiation
 (insolation) for a given astronomical configuration, true solar
@@ -118,10 +118,13 @@ longitude and latitude. This function takes five arguments:
   - `S0`: total solar irradiance
   - `H`: sun hour angle, in radians
 
-For example, we can find the montly isolation for the last 100 ka years
+For example, we can find the monthly insolation for the last 100ka years
 at Lago di Fimon (45.469951, 11.543468) as follows:
 
 ``` r
+# Load the pipe operator from `magrittr`
+`%>%` <- magrittr::`%>%`
+
 # Generate a sequence (vector) with mid-month values
 mid_month <- seq(from = 15.5, to = 345.5, by = 30)
 
@@ -146,7 +149,7 @@ orb_param <- orb_param %>%
   dplyr::mutate(year = years, .before = 1)
 
 
-# Calculate the isolation values at the location of interest
+# Calculate the insolation values at the location of interest
 ## Set the latitude of interest
 lat <- 45.469951
 
@@ -178,7 +181,28 @@ insol_tbl %>%
 |  \-92000 | 133.1454 | 203.6735 | 302.8994 | 396.6524 | 459.7820 | 480.7091 | 458.0658 | 399.8083 | 317.9303 | 227.5600 | 151.4129 | 114.9789 |
 |  \-91000 | 132.3348 | 204.3632 | 306.5991 | 403.8004 | 468.5986 | 488.0544 | 461.4077 | 398.7403 | 314.1525 | 223.5286 | 148.6188 | 113.3675 |
 
-Create plots for all the months
+### Plots
+
+##### Plot insolation for January
+
+``` r
+insol_tbl %>%
+  tidyr::pivot_longer(cols = 2:13, names_to = "month") %>%
+  dplyr::mutate(year = year / 1000) %>%
+  dplyr::filter(month %in% c("Jan")) %>%
+  ggplot2::ggplot(ggplot2::aes(year, value)) +
+  ggplot2::geom_point(size = 0.5) +
+  ggplot2::geom_line(colour = "navyblue") +
+  ggplot2::labs(x = "Year [kyr]", 
+                y = "Insolation [W m-2]",
+                title = "January's insolation for the last 100ka yrs") +
+  ggplot2::scale_x_continuous(breaks = scales::pretty_breaks(10)) +
+  ggplot2::theme_bw()
+```
+
+<img src="man/figures/README-monthly-insolation-january-1.png" width="100%" />
+
+##### Plot insolation by season
 
 ``` r
 insol_tbl %>%
@@ -202,4 +226,24 @@ insol_tbl %>%
   ggplot2::theme_bw()
 ```
 
-<img src="man/figures/README-monthly-insolation-1.png" width="100%" />
+<img src="man/figures/README-monthly-insolation-seasonal-1.png" width="100%" />
+
+##### Plot annual insolation
+
+``` r
+insol_tbl %>%
+  dplyr::group_by(year) %>% 
+  dplyr::summarise(value = sum(Jan:Dec)) %>%
+  dplyr::mutate(value = value / 1000,
+                year = year / 1000) %>%
+  ggplot2::ggplot(ggplot2::aes(year, value)) +
+  ggplot2::geom_point(size = 0.5) +
+  ggplot2::geom_line(colour = "navyblue") +
+  ggplot2::labs(x = "Year [kyr]", 
+                y = "Insolation [kW m-2]",
+                title = "Annual insolation for the last 100ka yrs") +
+  ggplot2::scale_x_continuous(breaks = scales::pretty_breaks(10)) +
+  ggplot2::theme_bw()
+```
+
+<img src="man/figures/README-annual-insolation-1.png" width="100%" />
