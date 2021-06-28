@@ -243,6 +243,7 @@ insol_tbl %>%
                 y = "Insolation [kW m-2]",
                 title = "Annual insolation for the last 100ka yrs") +
   ggplot2::scale_x_continuous(breaks = scales::pretty_breaks(10)) +
+  ggplot2::scale_y_continuous(breaks = scales::pretty_breaks(10)) +
   ggplot2::theme_bw()
 ```
 
