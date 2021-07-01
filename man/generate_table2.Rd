@@ -20,13 +20,10 @@ Tibble with the precession amplitudes and frequencies.
 }
 \description{
 Re-generates the precession amplitudes and frequencies based on files
-provided by (Berger, 1978), (labelled Table 2 in the original publication).
-The present routine is an implementation of the original article (Berger
-and Loutre, 1990)
+provided by \insertCite{berger1978long}{palinsol}, (labelled Table 2 in the original publication).
+The present routine is an implementation of the original article \insertCite{berger1990origine}{palinsol}.
 }
 \references{
-Berger, A.L., 1978. Long-term variations of daily insolation and Quaternary climatic changes. Journal of Atmospheric Sciences, 35(12), pp.2362-2367.
-
-Berger, A.L. and Loutre, M.F., 1990. Origine des fréquences des éléments astronomiques intervenant dans le calcul de l'insolation. Bulletins de l'Académie Royale de Belgique, 1(1), pp.45-106.
+\insertAllCited{}
 }
 \keyword{internal}

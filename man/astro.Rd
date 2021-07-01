@@ -4,7 +4,7 @@
 \alias{astro}
 \title{Compute astronomical parameters in the past or in the future}
 \usage{
-astro(t, solution = ber78, degree = FALSE)
+astro(t, solution, degree = FALSE)
 }
 \arguments{
 \item{t}{Time, years after 1950.}
@@ -19,13 +19,14 @@ degrees.}
 A vector of 3 (la04) or 4 (\code{ber78} and \code{ber90}) astronomical elements
 \tabular{ll}{
 \code{eps} \tab obliquity, \cr
-\code{ecc}\tab  eccentricity and \cr \code{varpi} true solar longitude of the perihelion. \cr
+\code{ecc}\tab  eccentricity and \cr
+\code{varpi} true solar longitude of the perihelion. \cr
 }
 \code{ber78} and \code{ber90} also return
 \code{epsp}, the Hilbert transform of obliquity (sines changed
 in cosines in the spectral decomposition).
 
-Angles are returned in radians unless \code{degree=TRUE}
+Angles are returned in radians unless \code{degree = TRUE}
 }
 \description{
 Compute astronomical parameters in the past or in the future
@@ -33,12 +34,12 @@ Compute astronomical parameters in the past or in the future
 \details{
 Both \code{ber78} and  \code{ber90}  compute astronomical elements based on a spectral
 decomposition (sum of sines and cosines) of obliquity and planetary precession parameters.
-\code{ber78} uses the Berger (1978) algorithm and is accurate for +/- 1e6 years about the
-present. \code{ber90} uses the Berger and Loutre (1991) algorithm and is accurate
+\code{ber78} uses the \insertCite{berger1978long;textual}{palinsol} algorithm and is accurate for +/- 1e6 years about the
+present. \code{ber90} uses the \insertCite{berger1991insolation;textual}{palinsol} algorithm and is accurate
 for  +/- 3e6 years   about the present (but with a tiny accuracy over the last 50 kyr,
 usually negligible for any palaeo application, see example below).
 
-\code{la04}  interpolates tables provided by Laskar (2004), obtained by a simplectic
+\code{la04}  interpolates tables provided by \insertCite{laskar2004long;textual}{palinsol}, obtained by a simplectic
 numerical integration of the planetary system, in which the Moon is considered as a planet.
 This solution is valid for about 50 Myr around the present.
 
@@ -94,13 +95,9 @@ legend('topright',
        lty = 1)
 }
 \references{
-Berger, A. L. (1978).  Long-term variations of daily insolation and Quaternary climatic changes, J. Atmos. Sci., 35,
-2362-2367, doi:10.1175/1520-0469(1978)035<2362:LTVODI>2.0.CO;2
-
-Berger and M.F. Loutre (1991), Insolation values for the climate of the last 10 million years,  Quaternary Science Reviews, 10, 297 - 317, doi:10.1016/0277-3791(91)90033-Q
-
-J. Laskar et al. (2004), A long-term numerical solution for the insolation quantities of the Earth,  Astron. Astroph., 428, 261-285, doi:10.1051/0004-6361:20041335
+\insertAllCited{}
 }
 \author{
 Michel Crucifix, U. catholique de Louvain, Belgium.
 }
+\keyword{misc}
