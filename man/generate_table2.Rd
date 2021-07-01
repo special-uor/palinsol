@@ -7,7 +7,7 @@
 generate_table2(Table1, Table4, Table5, sol = "BER78")
 }
 \arguments{
-\item{Table1}{Tibble object.}
+\item{Table1}{Tibble object (unused).}
 
 \item{Table4}{Tibble object.}
 
