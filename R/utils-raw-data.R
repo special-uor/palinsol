@@ -3,7 +3,7 @@
 #' Re-generates the precession amplitudes and frequencies based on files
 #' provided by \insertCite{berger1978long}{palinsol}, (labelled Table 2 in the original publication).
 #' The present routine is an implementation of the original article \insertCite{berger1990origine}{palinsol}.
-#' @param Table1 Tibble object.
+#' @param Table1 Tibble object (unused).
 #' @param Table4 Tibble object.
 #' @param Table5 Tibble object.
 #' @param sol Solution name, e.g., 'BER78'.
@@ -25,12 +25,12 @@ generate_table2 <- function(Table1, Table4, Table5, sol = 'BER78') {
   }
 
   ## PsiBar
-  g <- Table4[, 3]#$V3
-  M <- Table4[, 2]#$V2
-  beta <- Table4[, 4]#$V4
-  F <- Table5[, 2] / 60. / 60. * pi / 180 #$V2/60./60.*pi/180
-  f <- Table5[, 3]#$V3
-  delta <- Table5[, 4]#$V4
+  g <- purrr::flatten_dbl(Table4[, 3])#$V3
+  M <- purrr::flatten_dbl(Table4[, 2])#$V2
+  beta <- purrr::flatten_dbl(Table4[, 4])#$V4
+  F <- purrr::flatten_dbl(Table5[, 2] / 60. / 60. * pi / 180) #$V2/60./60.*pi/180
+  f <- purrr::flatten_dbl(Table5[, 3]) #$V3
+  delta <- purrr::flatten_dbl(Table5[, 4]) #$V4
 
   ## division in 3 groups, as in Table 13 and Table 14 of Berger & Loutre, Ac. Roy. 1990
   Fre <- c(g + P, outer(g, f, "+") + P, outer(g, f, "-") + P)
@@ -50,7 +50,6 @@ generate_table2 <- function(Table1, Table4, Table5, sol = 'BER78') {
   ## truncates the first 200 terms
   Fre <- Fre[1:Ntrun]
   Amp <- Amp[1:Ntrun]
-
 
   N <- length(Fre)
   for (i in 1:(N - 1)) {
