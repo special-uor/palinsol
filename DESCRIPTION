@@ -19,10 +19,11 @@ KeepSource: true
 URL: https://bitbucket.org/mcrucifix/insol
 Packaged: 2014-04-03 18:32:12 UTC; crucifix
 Suggests: 
-  gsl
+    gsl
 Imports: 
-  tibble,
-  Rdpack (>= 0.7)
+    tibble,
+    Rdpack (>= 0.7),
+    magrittr
 RdMacros: Rdpack
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
