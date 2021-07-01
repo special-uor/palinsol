@@ -5,3 +5,4 @@
 ^data-raw$
 ^man_original$
 ^inst/extdata/*.R$
+^R\.ignore$
