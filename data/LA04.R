@@ -22,39 +22,39 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # When using this package for actual applications, always
-# cite the authors of the original insolation solutions 
+# cite the authors of the original insolation solutions
 # Berger, Loutre and/or Laskar, see details in man pages
 
 
 # ------------------------------------------------------------------
 # R Code developed for R version 2.15.2 (2012-10-26) -- "Trick or Treat"
-# ------------------------------------------------------------------ 
+# ------------------------------------------------------------------
 
-#### load La04 table
-local({
-fpathn <- file.path("..","inst","extdata", "INSOLN.LA2004.BTL.ASC.gz")
-fpathp <- file.path("..","inst","extdata", "INSOLP.LA2004.BTL.ASC.gz")
-
-if (! file.exists(fpathn)) # mmm. maybe the packages is already installed
-{
-fpathn <- system.file("extdata", "INSOLN.LA2004.BTL.ASC.gz", package="palinsol")
-fpathp <- system.file("extdata", "INSOLP.LA2004.BTL.ASC.gz", package="palinsol")
-}
-
-
-
-la04past     <<- read.table(gzfile(fpathn), col.names=c('time','ecc','eps','varpi'))
-la04future   <<- read.table(gzfile(fpathp), col.names=c('time','ecc','eps','varpi'))
-
-
-la04past['varpi'] <- (la04past['varpi'] - pi ) %% (2*pi)
-la04future['varpi'] <- (la04future['varpi'] - pi ) %% (2*pi)
-
-#LA04 <<- list(la04past=la04past, la04future = la04future)
-
-la04past <<- la04past
-la04future <<- la04future
-})
-
-la04past <- la04past
-la04future <- la04future
+# #### load La04 table
+# local({
+# fpathn <- file.path("..","inst","extdata", "INSOLN.LA2004.BTL.ASC.gz")
+# fpathp <- file.path("..","inst","extdata", "INSOLP.LA2004.BTL.ASC.gz")
+#
+# if (! file.exists(fpathn)) # mmm. maybe the packages is already installed
+# {
+# fpathn <- system.file("extdata", "INSOLN.LA2004.BTL.ASC.gz", package="palinsol")
+# fpathp <- system.file("extdata", "INSOLP.LA2004.BTL.ASC.gz", package="palinsol")
+# }
+#
+#
+#
+# la04past     <<- read.table(gzfile(fpathn), col.names=c('time','ecc','eps','varpi'))
+# la04future   <<- read.table(gzfile(fpathp), col.names=c('time','ecc','eps','varpi'))
+#
+#
+# la04past['varpi'] <- (la04past['varpi'] - pi ) %% (2*pi)
+# la04future['varpi'] <- (la04future['varpi'] - pi ) %% (2*pi)
+#
+# #LA04 <<- list(la04past=la04past, la04future = la04future)
+#
+# la04past <<- la04past
+# la04future <<- la04future
+# })
+#
+# la04past <- la04past
+# la04future <- la04future
