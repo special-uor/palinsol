@@ -4,5 +4,6 @@
 ^\.github$
 ^data-raw$
 ^man_original$
-^inst/extdata/*.R$
+^inst/extdata$
+^extdata$
 ^R\.ignore$
