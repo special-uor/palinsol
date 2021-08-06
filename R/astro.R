@@ -342,22 +342,34 @@ la04 <- function(t, degree = FALSE) {
   OUT
 }
 
-precession <- function(t,solution=ber78)
-##  as astro, but returns only precession parameter e sin (varpi)
-{
-  O <- astro(t,solution, degree=FALSE)
+#' Precession parameter, \eqn{e sin(varpi)}
+#'
+#' @inheritParams astro
+#'
+#' @return Precession parameter, \eqn{e sin(varpi)}
+#' @keywords internal
+precession <- function(t, solution = ber78) {
+  O <- astro(t, solution, degree = FALSE)
   as.numeric(O['ecc'] * sin (O['varpi']))
 }
 
-coprecession <- function(t,solution=ber78)
-##  as astro, but returns only precession parameter e sin (varpi)
-{
-  O <- astro(t,solution, degree=FALSE)
+#' Coprecession parameter, \eqn{e cos(varpi)}
+#'
+#' @inheritParams astro
+#'
+#' @return Coprecession parameter, \eqn{e cos(varpi)}
+#' @keywords internal
+coprecession <- function(t, solution = ber78) {
+  O <- astro(t, solution, degree = FALSE)
   as.numeric(O['ecc'] * cos (O['varpi']))
 }
 
-
-
-obliquity <- function(t,solution=ber78,degree=FALSE)
-##  as astro, but returns only obliquity
-{ as.numeric(astro(t,solution, degree=degree)['eps']) }
+#' Obliquity
+#'
+#' @inheritParams astro
+#'
+#' @return Obliquity
+#' @keywords internal
+obliquity <- function(t, solution = ber78, degree = FALSE) {
+  as.numeric(astro(t, solution, degree = degree)['eps'])
+}
