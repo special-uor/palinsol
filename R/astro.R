@@ -138,18 +138,29 @@ astro <- function(t, solution = ber78, degree = FALSE) {
   solution(t, degree)
 }
 
- ## Calculates climate orbital elements according to the algorithm given in A. Berger (1978)
- # Berger, A. L. (1978).  Long-term variations of daily insolation and Quaternary climatic changes,
- # J. Atmos. Sci., 35(), 2362-2367
-
- # This solution is valid for + / - 1e6 years.
- # uses MBCS_BER78 provided by A. Berger, available on
- # ftp://ftp.astr.ucl.ac.be/pub/berger/berger78/INSOL.IN
-
-## attach table to ber78 function
-## Input :  t = time expressed in yr after 1950.0 (reference epoch)
-
-#' @export
+#' \insertCite{berger1978long;textual}{palinsol} solution
+#'
+#' Calculates climate orbital elements according to the algorithm given in
+#' \insertCite{berger1978long;textual}{palinsol}.
+#'
+#' This solution is valid for + / - 1e6 years.
+#' It uses MBCS_BER78 provided by A. Berger, available on
+#' ftp://ftp.astr.ucl.ac.be/pub/berger/berger78/INSOL.IN
+#'
+#' @inheritParams astro
+#'
+#' @return A vector of  4 astronomical elements
+#' \tabular{ll}{
+#'   \code{eps} \tab obliquity, \cr
+#'   \code{ecc}\tab  eccentricity and \cr
+#'   \code{varpi} true solar longitude of the perihelion. \cr
+#'   \code{epsp}, the Hilbert transform of obliquity (sines changed in cosines
+#'   in the spectral decomposition). \cr
+#' }
+#'
+#' Angles are returned in radians unless \code{degree = TRUE}
+#'
+#' @keywords internal
 ber78 <- function(t, degree = FALSE) {
   data("BER78", package = "palinsol", envir = environment())
 
@@ -196,15 +207,28 @@ ber78 <- function(t, degree = FALSE) {
     varpi = varpi,
     epsp = epsp)
 }
- ## Calculates climate orbital elements according to the algorithm given in A. Berger (1978)
- # Berger, A. L. (1978).  Long-term variations of daily insolation and Quaternary climatic changes,
- # J. Atmos. Sci., 35(), 2362-2367
 
- # This solution is valid for + / - 3e6 years.
-
-## attach table to ber90 function
-## Input :  t = time expressed in yr after 1950.0 (reference epoch)
-
+#' \insertCite{berger1990origine;textual}{palinsol} solution
+#'
+#' Calculates climate orbital elements according to the algorithm given in
+#' \insertCite{berger1990origine;textual}{palinsol}.
+#'
+#' This solution is valid for + / - 3e6 years.
+#'
+#' @inheritParams astro
+#'
+#' @return A vector of  4 astronomical elements
+#' \tabular{ll}{
+#'   \code{eps} \tab obliquity, \cr
+#'   \code{ecc}\tab  eccentricity and \cr
+#'   \code{varpi} true solar longitude of the perihelion. \cr
+#'   \code{epsp}, the Hilbert transform of obliquity (sines changed in cosines
+#'   in the spectral decomposition). \cr
+#' }
+#'
+#' Angles are returned in radians unless \code{degree = TRUE}
+#'
+#' @keywords internal
 ber90 <- function(t, degree = FALSE) {
   data("BER90", package = "palinsol", envir = environment())
 
@@ -251,10 +275,25 @@ ber90 <- function(t, degree = FALSE) {
     epsp = epsp)
 }
 
- # This solution is valid for 50e6 years
-
-## Input :  t = time expressed in yr after 1950.0 (reference epoch)
-
+#' \insertCite{laskar2004long;textual}{palinsol} solution
+#'
+#' Calculates climate orbital elements according to the algorithm given in
+#' \insertCite{laskar2004long;textual}{palinsol}.
+#'
+#' This solution is valid for 50e6 years.
+#'
+#' @inheritParams astro
+#'
+#' @return A vector of  3 astronomical elements
+#' \tabular{ll}{
+#'   \code{eps} \tab obliquity, \cr
+#'   \code{ecc}\tab  eccentricity and \cr
+#'   \code{varpi} true solar longitude of the perihelion. \cr
+#' }
+#'
+#' Angles are returned in radians unless \code{degree = TRUE}
+#'
+#' @keywords internal
 la04 <- function(t, degree = FALSE) {
   tka = t / 1000.
   ORB <- NULL
