@@ -30,11 +30,6 @@
 # R Code developed for R version 2.15.2 (2012-10-26) -- "Trick or Treat"
 # ------------------------------------------------------------------
 
- ## calculates astronomical elements according to the solutions given below
-
-.LA04  <- new.env()
-
-
 #' Compute astronomical parameters in the past or in the future
 #'
 #' @details
@@ -154,8 +149,6 @@ astro <- function(t, solution = ber78, degree = FALSE) {
 ## attach table to ber78 function
 ## Input :  t = time expressed in yr after 1950.0 (reference epoch)
 
-.LA04  <- new.env()
-
 #' @export
 ber78 <- function(t, degree = FALSE) {
   data("BER78", package = "palinsol", envir = environment())
@@ -262,65 +255,53 @@ ber90 <- function(t, degree = FALSE) {
 
 ## Input :  t = time expressed in yr after 1950.0 (reference epoch)
 
-la04 <- function(t,degree=FALSE)
-{
-  if (!exists(".loaded", envir=.LA04))
-  {
-     data('LA04', envir=.LA04)
-     message("LA04 data loaded")
-     assign('.loaded',  TRUE,  envir = .LA04 )
+la04 <- function(t, degree = FALSE) {
+  tka = t / 1000.
+  ORB <- NULL
+  if (tka > 0) {
+    F <- floor(tka)
+    ORB <- LA04$la04future[F + 1, ]
+    if (!(tka == F)) {
+      D  <- tka - floor(tka)
+      diff <- LA04$la04future[F + 2, ] - ORB
+      # note : if the diff in varpi is greater than pi,
+      # this probably means that we have skipped 2*pi,
+      # so we need to correct accordingly
+      if (diff$varpi > pi)
+        diff$varpi = diff$varpi - 2 * pi
+      if (diff$varpi < -pi)
+        diff$varpi = diff$varpi + 2 * pi
+      ORB <- ORB + D * diff
+    }
+  } else {
+    F <- floor(tka)
+    ORB <- LA04$la04past[-F + 1, ]
+    if (!(tka == F)) {
+      D  <- tka - F
+      diff <- LA04$la04past[-F, ] - ORB
+      # note : if the diff in varpi is greater than pi,
+      # this probably means that we have skipped 2*pi,
+      # so we need to correct accordingly
+      if (diff$varpi > pi)
+        diff$varpi = diff$varpi - 2 * pi
+      if (diff$varpi < -pi)
+        diff$varpi = diff$varpi + 2 * pi
+      ORB <- ORB + D * diff
+    }
   }
 
-  tka = t/1000.
-  if (tka>0)
-  {
-   local(
-   {
-    F <-  floor(tka)
-    ORB <<- .LA04$la04future[F+1, ]
-    if (! (tka == F)) {
-      D  <- tka - floor(tka)
-      diff <- .LA04$la04future[F+2, ] - ORB
-      # note : if the diff in varpi is greater than pi,
-      # this probably means that we have skipped 2*pi,
-      # so we need to correct accordingly
-      if (diff$varpi > pi) diff$varpi = diff$varpi - 2*pi
-      if (diff$varpi < -pi) diff$varpi = diff$varpi + 2*pi
-      #
-      ORB <<- ORB + D*diff
-    }
-   })}
-   else
-   {
-   local(
-   {
-    F <-  floor(tka)
-    ORB <<- .LA04$la04past[-F+1, ]
-    if (! (tka == F)) {
-      D  <- tka - F
+  if (degree) {
+    rad2deg <- 180 / pi
+    ORB['eps'] <- ORB['eps'] * rad2deg
+    ORB['varpi'] <- ORB['varpi'] * rad2deg
+  }
 
-      diff <- .LA04$la04past[-F, ] - ORB
-      # note : if the diff in varpi is greater than pi,
-      # this probably means that we have skipped 2*pi,
-      # so we need to correct accordingly
-      if (diff$varpi > pi) diff$varpi = diff$varpi - 2*pi
-      if (diff$varpi < -pi) diff$varpi = diff$varpi + 2*pi
-      #
-      ORB <<- ORB + D*diff
-    }
-   })}
-
-  if (degree) {rad2deg <- 180/pi
-               ORB['eps'] <- ORB['eps']*rad2deg
-               ORB['varpi'] <- ORB['varpi']*rad2deg}
-
-
-   # must return a array (0.92 -> 0.93)
-   names <- c('eps','ecc','varpi')
-   OUT = as.numeric(ORB[names]) ; names(OUT) <- names
-   OUT
-
-   }
+  # must return an array (0.92 -> 0.93)
+  names <- c('eps', 'ecc', 'varpi')
+  OUT <- as.numeric(ORB[names])
+  names(OUT) <- names
+  OUT
+}
 
 precession <- function(t,solution=ber78)
 ##  as astro, but returns only precession parameter e sin (varpi)
