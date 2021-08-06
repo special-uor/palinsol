@@ -2,7 +2,7 @@
 `%>%` <- magrittr::`%>%`
 fpath <- system.file("extdata/BER90.IN.gz", package = "palinsol")
 if (!file.exists(fpath)) {
-  print("Downloading file from ... (not implemented yet)")
+  print("Downloading file from ... (broken link)")
 }
 
 tb4 <- readr::read_table2(fpath,
