@@ -157,59 +157,56 @@ astro <- function(t, solution = ber78, degree = FALSE) {
 ## attach table to ber78 function
 ## Input :  t = time expressed in yr after 1950.0 (reference epoch)
 
-
-.BER78 <- new.env()
 .BER90 <- new.env()
 .LA04  <- new.env()
 
-ber78 <- function(t,degree=FALSE)
-{
-  if (!exists(".loaded", envir=.BER78))
-  {
-     message('load BER78data')
-     data('BER78', envir=.BER78)
-     assign('.loaded',  TRUE,  envir = .BER78 )
-  }
+#' @export
+ber78 <- function(t, degree = FALSE) {
+  data("BER78", package = "palinsol", envir = environment())
 
-
-  psibar<- 50.439273/60./60. * pi/180
+  psibar <- 50.439273 / 60. / 60. * pi / 180
   estar <- 23.320556
   e0    <- 0.028707
-  zeta  <- 3.392506 * pi/180.
-  twopi <- 2*pi
+  zeta  <- 3.392506 * pi / 180.
+  twopi <- 2 * pi
 
-  sectorad <- pi/(180*60.*60.)
+  sectorad <- pi / (180 * 60. * 60.)
 
-  M <- .BER78$Table4$Amp
-  g <- .BER78$Table4$Rate*sectorad
-  b <- .BER78$Table4$Phase*pi/180
-  F <- .BER78$Table5$Amp*sectorad
-  fp <- .BER78$Table5$Rate*sectorad
-  d <- .BER78$Table5$Phase*pi/180.
-  A <- .BER78$Table1$Amp/60./60.
-  f <- .BER78$Table1$Rate*sectorad
-  phi<- .BER78$Table1$Phase*pi/180.
+  M <- BER78$Table4$Amp
+  g <- BER78$Table4$Rate * sectorad
+  b <- BER78$Table4$Phase * pi / 180
+  F <- BER78$Table5$Amp * sectorad
+  fp <- BER78$Table5$Rate * sectorad
+  d <- BER78$Table5$Phase * pi / 180.
+  A <- BER78$Table1$Amp / 60. / 60.
+  f <- BER78$Table1$Rate * sectorad
+  phi <- BER78$Table1$Phase * pi / 180.
 
   ## Obliquity
 
-  eps <- estar + sum(A*cos(f*t+phi))
-  epsp <- estar + sum(A*sin(f*t+phi))
+  eps <- estar + sum(A * cos(f * t + phi))
+  epsp <- estar + sum(A * sin(f * t + phi))
 
-  esinpi <- sum(M*sin(g*t+b))
-  ecospi <- sum(M*cos(g*t+b))
-  psi    <- psibar*t + zeta + sum(F*sin(fp*t +d))
+  esinpi <- sum(M * sin(g * t + b))
+  ecospi <- sum(M * cos(g * t + b))
+  psi    <- psibar * t + zeta + sum(F * sin(fp * t + d))
 
-  e <- sqrt(esinpi^2+ecospi^2)
-  Pi <-atan(esinpi/ecospi)+pi*(ecospi<0)
-  eps <- eps * pi/180.
-  epsp <- epsp * pi/180.
-  varpi <- (Pi+psi+pi) %% (twopi)
+  e <- sqrt(esinpi ^ 2 + ecospi ^ 2)
+  Pi <- atan(esinpi / ecospi) + pi * (ecospi < 0)
+  eps <- eps * pi / 180.
+  epsp <- epsp * pi / 180.
+  varpi <- (Pi + psi + pi) %% (twopi)
 
-  if (degree) {rad2deg <- 180/pi
-               eps <- eps*rad2deg
-               varpi <- varpi*rad2deg}
+  if (degree) {
+    rad2deg <- 180 / pi
+    eps <- eps * rad2deg
+    varpi <- varpi * rad2deg
+  }
 
-  c(eps=eps,ecc=e,varpi=varpi,epsp=epsp)
+  c(eps = eps,
+    ecc = e,
+    varpi = varpi,
+    epsp = epsp)
 }
  ## Calculates climate orbital elements according to the algorithm given in A. Berger (1978)
  # Berger, A. L. (1978).  Long-term variations of daily insolation and Quaternary climatic changes,
