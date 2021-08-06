@@ -32,9 +32,6 @@
 
  ## calculates astronomical elements according to the solutions given below
 
-
-.BER78 <- new.env()
-.BER90 <- new.env()
 .LA04  <- new.env()
 
 
@@ -157,7 +154,6 @@ astro <- function(t, solution = ber78, degree = FALSE) {
 ## attach table to ber78 function
 ## Input :  t = time expressed in yr after 1950.0 (reference epoch)
 
-.BER90 <- new.env()
 .LA04  <- new.env()
 
 #' @export
@@ -183,7 +179,6 @@ ber78 <- function(t, degree = FALSE) {
   phi <- BER78$Table1$Phase * pi / 180.
 
   ## Obliquity
-
   eps <- estar + sum(A * cos(f * t + phi))
   epsp <- estar + sum(A * sin(f * t + phi))
 
@@ -217,52 +212,50 @@ ber78 <- function(t, degree = FALSE) {
 ## attach table to ber90 function
 ## Input :  t = time expressed in yr after 1950.0 (reference epoch)
 
-ber90 <- function(t,degree=FALSE)
-{
-  if (!exists(".loaded", envir=.BER90))
-  {
-     message("load BER90 data")
-     data('BER90', envir=.BER90)
-     assign('.loaded',  TRUE,  envir = .BER90 )
-  }
+ber90 <- function(t, degree = FALSE) {
+  data("BER90", package = "palinsol", envir = environment())
 
-  psibar<- 50.41726176/60./60. * pi/180
+  psibar <- 50.41726176 / 60. / 60. * pi / 180
   estar <- 23.33340950
-  zeta  <- 1.60075265 * pi/180.
-  twopi <- 2*pi
+  zeta  <- 1.60075265 * pi / 180.
+  twopi <- 2 * pi
 
-  sectorad <- pi/(180*60.*60.)
+  sectorad <- pi / (180 * 60. * 60.)
 
-  M <- .BER90$Table4$Amp
-  g <- .BER90$Table4$Rate*sectorad
-  b <- .BER90$Table4$Phase*pi/180
-  F <- .BER90$Table5$Amp*sectorad
-  fp <- .BER90$Table5$Rate*sectorad
-  d <- .BER90$Table5$Phase*pi/180.
-  A <- .BER90$Table1$Amp/60./60.
-  f <- .BER90$Table1$Rate*sectorad
-  phi<- .BER90$Table1$Phase*pi/180.
+  M <- BER90$Table4$Amp
+  g <- BER90$Table4$Rate * sectorad
+  b <- BER90$Table4$Phase * pi / 180
+  F <- BER90$Table5$Amp * sectorad
+  fp <- BER90$Table5$Rate * sectorad
+  d <- BER90$Table5$Phase * pi / 180.
+  A <- BER90$Table1$Amp / 60. / 60.
+  f <- BER90$Table1$Rate * sectorad
+  phi <- BER90$Table1$Phase * pi / 180.
 
   ## Obliquity
+  eps <- estar + sum(A * cos(f * t + phi))
+  epsp <- estar + sum(A * sin(f * t + phi))
 
-  eps <- estar + sum(A*cos(f*t+phi))
-  epsp <- estar + sum(A*sin(f*t+phi))
+  esinpi <- sum(M * sin(g * t + b))
+  ecospi <- sum(M * cos(g * t + b))
+  psi    <- psibar * t + zeta + sum(F * sin(fp * t + d))
 
-  esinpi <- sum(M*sin(g*t+b))
-  ecospi <- sum(M*cos(g*t+b))
-  psi    <- psibar*t + zeta + sum(F*sin(fp*t +d))
+  e <- sqrt(esinpi ^ 2 + ecospi ^ 2)
+  Pi <- atan(esinpi / ecospi) + pi * (ecospi < 0)
+  eps <- eps * pi / 180.
+  epsp <- epsp * pi / 180.
+  varpi <- (Pi + psi + pi) %% (twopi)
 
-  e <- sqrt(esinpi^2+ecospi^2)
-  Pi <-atan(esinpi/ecospi)+pi*(ecospi<0)
-  eps <- eps * pi/180.
-  epsp <- epsp * pi/180.
-  varpi <- (Pi+psi+pi) %% (twopi)
+  if (degree) {
+    rad2deg <- 180 / pi
+    eps <- eps * rad2deg
+    varpi <- varpi * rad2deg
+  }
 
-  if (degree) {rad2deg <- 180/pi
-               eps <- eps*rad2deg
-               varpi <- varpi*rad2deg}
-
-  c(eps=eps,ecc=e,varpi=varpi,epsp=epsp)
+  c(eps = eps,
+    ecc = e,
+    varpi = varpi,
+    epsp = epsp)
 }
 
  # This solution is valid for 50e6 years
