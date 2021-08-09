@@ -34,4 +34,4 @@ BER90 <- list(
   Table5 = tb5
 )
 
-usethis::use_data(BER90, overwrite = TRUE)
+usethis::use_data(BER90, overwrite = TRUE, compress = "xz")
