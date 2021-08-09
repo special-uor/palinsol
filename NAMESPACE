@@ -2,5 +2,8 @@
 
 export("%>%")
 export(astro)
+export(ber78)
+export(ber90)
+export(la04)
 importFrom(Rdpack,reprompt)
 importFrom(magrittr,"%>%")

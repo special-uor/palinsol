@@ -20,4 +20,4 @@ LA04 <- list(
   la04future = la04future
 )
 
-usethis::use_data(LA04, overwrite = TRUE)
+usethis::use_data(LA04, overwrite = TRUE, compress = "xz")
