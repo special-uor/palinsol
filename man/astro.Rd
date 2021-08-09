@@ -2,9 +2,18 @@
 % Please edit documentation in R/astro.R
 \name{astro}
 \alias{astro}
+\alias{ber78}
+\alias{ber90}
+\alias{la04}
 \title{Compute astronomical parameters in the past or in the future}
 \usage{
 astro(t, solution, degree = FALSE)
+
+ber78(t, degree = FALSE)
+
+ber90(t, degree = FALSE)
+
+la04(t, degree = FALSE)
 }
 \arguments{
 \item{t}{Time, years after 1950.}
@@ -20,7 +29,7 @@ A vector of 3 (la04) or 4 (\code{ber78} and \code{ber90}) astronomical elements
 \tabular{ll}{
 \code{eps} \tab obliquity, \cr
 \code{ecc}\tab  eccentricity and \cr
-\code{varpi} true solar longitude of the perihelion. \cr
+\code{varpi}\tab true solar longitude of the perihelion.
 }
 \code{ber78} and \code{ber90} also return
 \code{epsp}, the Hilbert transform of obliquity (sines changed
