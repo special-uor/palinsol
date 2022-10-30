@@ -1,6 +1,7 @@
 ## code to prepare `BER90` dataset goes here
 `%>%` <- magrittr::`%>%`
 fpath <- system.file("extdata/BER90.IN.gz", package = "palinsol")
+source("data-raw/utils-raw-data.R") # import the function generate_table2
 if (!file.exists(fpath)) {
   print("Downloading file from ... (broken link)")
 }
@@ -21,7 +22,7 @@ tb5 <- readr::read_table2(fpath,
                           col_names = FALSE) %>%
   magrittr::set_names(c('Term', 'Amp', 'Rate', 'Phase', 'Period'))
 
-tb2 <- palinsol:::generate_table2(tb1, tb4, tb5, sol = 'BER90')
+tb2 <- generate_table2(tb1, tb4, tb5, sol = 'BER90')
 
 tb4 <- tb4 %>%
   dplyr::mutate(Term = seq_along(Term),
