@@ -160,6 +160,9 @@ astro <- function(t, solution = ber78, degree = FALSE) {
 #' @export
 #' @rdname astro
 ber78 <- function(t, degree = FALSE) {
+  # local binding
+  BER78 <- NULL
+  # load data from the package
   data("BER78", package = "palinsol", envir = environment())
 
   psibar <- 50.439273 / 60. / 60. * pi / 180
@@ -229,6 +232,9 @@ ber78 <- function(t, degree = FALSE) {
 #' @export
 #' @rdname astro
 ber90 <- function(t, degree = FALSE) {
+  # local binding
+  BER90 <- NULL
+  # load data from the package
   data("BER90", package = "palinsol", envir = environment())
 
   psibar <- 50.41726176 / 60. / 60. * pi / 180
@@ -295,6 +301,9 @@ ber90 <- function(t, degree = FALSE) {
 #' @export
 #' @rdname astro
 la04 <- function(t, degree = FALSE) {
+  # local binding
+  LA04 <- NULL
+  # load data from the package
   data("LA04", package = "palinsol", envir = environment())
   tka = t / 1000.
   ORB <- NULL
