@@ -6,10 +6,7 @@
 \alias{palinsol-package}
 \title{palinsol: Insolation for Palaeoclimate Studies}
 \description{
-R package to compute Incoming Solar Radiation (insolation) for 
-    palaeoclimate studies. Features three solutions: Berger (1978), Berger and 
-    Loutre (1991) and Laskar et al. (2004). Computes daily-mean, season-averaged 
-    and annual means for all latitudes.
+R package to compute Incoming Solar Radiation (insolation) for palaeoclimate studies. Features three solutions: Berger (1978), Berger and Loutre (1991) and Laskar et al. (2004). Computes daily-mean, season-averaged and annual means for all latitudes.
 }
 \seealso{
 Useful links:
