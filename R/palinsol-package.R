@@ -2,6 +2,8 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @importFrom magrittr %>%
+#' @importFrom Rdpack reprompt
+#' @importFrom graphics axis image
+#' @importFrom utils data
 ## usethis namespace: end
 NULL

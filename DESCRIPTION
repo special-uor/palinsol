@@ -21,10 +21,7 @@ Packaged: 2014-04-03 18:32:12 UTC; crucifix
 Suggests: 
     gsl
 Imports: 
-    Rdpack (>= 0.7),
-    magrittr,
-    purrr,
-    tibble
+    Rdpack (>= 2.2)
 RdMacros: Rdpack
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
